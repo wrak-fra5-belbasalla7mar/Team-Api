@@ -44,22 +44,24 @@ public class TeamServiceImpl implements TeamService {
         team = teamRepository.save(team);
         return teamMapper.toDto(team);
     }
+
     @Override
     public TeamDto getTeamById(Long id) {
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Team not found with id: " + id));
         return teamMapper.toDto(team);
     }
+
     @Override
     public void addMember(Long teamId, Long userId) {
-        Optional<UserDto> optionalUser = userClient.getUserById(userId);
         Optional<Team> optionalTeam = teamRepository.findById(teamId);
-
-        if (optionalUser.isEmpty()) {
-            throw new NotFoundException("User not found with id: " + userId);
-        }
         if (optionalTeam.isEmpty()) {
             throw new NotFoundException("Team not found with id: " + teamId);
+        }
+
+        Optional<UserDto> optionalUser = userClient.getUserById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new NotFoundException("User not found with id: " + userId);
         }
 
         Team team = optionalTeam.get();

@@ -18,12 +18,12 @@ public class TeamController {
 
     private TeamService teamService;
 
-    @GetMapping("")
+    @GetMapping
     public List<TeamDto> getAllTeams() {
         return teamService.getAllTeams();
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<TeamDto> createTeam(@RequestBody TeamDto teamDto) {
         TeamDto createdTeam = teamService.createTeam(teamDto);
         return ResponseEntity.created(URI.create("/teams/" + createdTeam.getId()))
@@ -33,5 +33,11 @@ public class TeamController {
     @GetMapping("/{id}")
     public TeamDto getTeam(@PathVariable Long id) {
         return teamService.getTeamById(id);
+    }
+
+    @PostMapping("/{teamId}/members/{userId}")
+    public ResponseEntity<Void> addMember(@PathVariable Long teamId, @PathVariable Long userId) {
+        teamService.addMember(teamId, userId);
+        return ResponseEntity.ok().build();
     }
 }
