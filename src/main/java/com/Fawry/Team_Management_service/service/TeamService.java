@@ -12,4 +12,8 @@ public interface TeamService {
     public TeamDto createTeam(TeamDto teamDto);
 
     public void addMember(Long teamId, Long userId);
+
+    public TeamDto assignManager(Long teamId, Long managerId);
+
+    public void removeMember(Long teamId, Long userId);
 }

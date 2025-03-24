@@ -2,21 +2,19 @@ package com.Fawry.Team_Management_service.controller;
 
 import com.Fawry.Team_Management_service.dto.TeamDto;
 import com.Fawry.Team_Management_service.service.TeamService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-@Data
+
 @RestController
 @RequestMapping("/teams")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TeamController {
 
-    private TeamService teamService;
+    private final TeamService teamService;
 
     @GetMapping
     public List<TeamDto> getAllTeams() {
@@ -39,5 +37,16 @@ public class TeamController {
     public ResponseEntity<Void> addMember(@PathVariable Long teamId, @PathVariable Long userId) {
         teamService.addMember(teamId, userId);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{teamId}/assign-manager/{managerId}")
+    public ResponseEntity<TeamDto> assignManager(@PathVariable Long teamId, @PathVariable Long managerId) {
+        return ResponseEntity.ok(teamService.assignManager(teamId, managerId));
+    }
+
+    @DeleteMapping("/{teamId}/remove-member/{userId}")
+    public ResponseEntity<Void> removeMember(@PathVariable Long teamId, @PathVariable Long userId) {
+        teamService.removeMember(teamId, userId);
+        return ResponseEntity.noContent().build();
     }
 }
