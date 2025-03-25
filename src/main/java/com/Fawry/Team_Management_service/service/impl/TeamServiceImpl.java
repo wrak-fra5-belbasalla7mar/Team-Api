@@ -15,8 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +37,7 @@ public class TeamServiceImpl implements TeamService {
     private final TeamMemberRepository teamMemberRepository;
     private final RabbitTemplate rabbitTemplate;
     private final TeamMapper teamMapper;
-
+    private final WebClient webClient = WebClient.create("http://localhost:8080/manager"); // Directly create WebClient
     @Override
     public List<TeamDto> getAllTeams() {
         logger.info("Fetching all teams");
@@ -70,12 +73,25 @@ public class TeamServiceImpl implements TeamService {
                 .orElseThrow(() -> new NotFoundException("Team not found with id: " + teamId));
 
         // Retrieve user details from User API via RabbitMQ
-        UserDto user = rabbitTemplate.convertSendAndReceiveAsType(
-                RabbitMQConfig.EXCHANGE_NAME,
-                RabbitMQConfig.ROUTING_KEY,
-                userId,
-                USER_DTO_TYPE
-        );
+//        UserDto user = rabbitTemplate.convertSendAndReceiveAsType(
+//                RabbitMQConfig.EXCHANGE_NAME,
+//                RabbitMQConfig.ROUTING_KEY,
+//                userId,
+//                USER_DTO_TYPE
+//        );
+//
+        UserDto user = webClient.get()
+                .uri("/find?id=" + userId)
+                .retrieve()
+                .onStatus(HttpStatus.NOT_FOUND::equals, response -> {
+                    logger.error("User not found with id: {}", userId);
+                    return response.createException().flatMap(error ->
+                            Mono.error(new NotFoundException("User not found with id: " + userId))
+                    );
+                })
+                .bodyToMono(UserDto.class)
+                .block(); // Blocking call, use async handling in production
+
 
         if (user == null) {
             logger.error("User not found with id: {}", userId);
