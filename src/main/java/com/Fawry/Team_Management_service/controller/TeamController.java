@@ -24,14 +24,19 @@ public class TeamController {
     @PostMapping
     public ResponseEntity<TeamDto> createTeam(@RequestBody TeamDto teamDto) {
         TeamDto createdTeam = teamService.createTeam(teamDto);
-        return ResponseEntity.created(URI.create("/teams/" + createdTeam.getId()))
-                .body(createdTeam);
+        return ResponseEntity.created(URI.create("/teams/" + createdTeam.getId())).body(createdTeam);
     }
 
     @GetMapping("/{id}")
     public TeamDto getTeam(@PathVariable Long id) {
         return teamService.getTeamById(id);
     }
+
+    @GetMapping("/by-manager/{managerId}")
+    public ResponseEntity<TeamDto> getTeamByManager(@PathVariable Long managerId) {
+        return ResponseEntity.ok(teamService.getTeamByManagerId(managerId));
+    }
+
 
     @PostMapping("/{teamId}/members/{userId}")
     public ResponseEntity<Void> addMember(@PathVariable Long teamId, @PathVariable Long userId) {

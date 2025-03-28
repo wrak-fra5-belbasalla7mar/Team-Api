@@ -1,6 +1,5 @@
 package com.Fawry.Team_Management_service.service.impl;
 
-import com.Fawry.Team_Management_service.configuration.RabbitMQConfig;
 import com.Fawry.Team_Management_service.dal.model.Team;
 import com.Fawry.Team_Management_service.dal.model.TeamMember;
 import com.Fawry.Team_Management_service.dal.repo.TeamMemberRepository;
@@ -22,7 +21,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,13 +29,14 @@ public class TeamServiceImpl implements TeamService {
 
     private static final Logger logger = LoggerFactory.getLogger(TeamServiceImpl.class);
 
-    private static final ParameterizedTypeReference<UserDto> USER_DTO_TYPE = new ParameterizedTypeReference<>() {};
+    private static final ParameterizedTypeReference<UserDto> USER_DTO_TYPE = new ParameterizedTypeReference<>() {
+    };
 
     private final TeamRepository teamRepository;
     private final TeamMemberRepository teamMemberRepository;
-    private final RabbitTemplate rabbitTemplate;
     private final TeamMapper teamMapper;
     private final WebClient webClient = WebClient.create("http://localhost:8080/manager"); // Directly create WebClient
+
     @Override
     public List<TeamDto> getAllTeams() {
         logger.info("Fetching all teams");
@@ -65,6 +64,15 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public TeamDto getTeamByManagerId(Long managerId) {
+        logger.info("Fetching team managed by user id: {}", managerId);
+        Team team = teamRepository.findByManagerId(managerId)
+                .orElseThrow(() -> new NotFoundException("No team found for this manager id: " + managerId));
+        return teamMapper.toDto(team);
+    }
+
+
+    @Override
     @Transactional
     public void addMember(Long teamId, Long userId) {
         logger.info("Adding member with userId {} to team {}", userId, teamId);
@@ -72,14 +80,6 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new NotFoundException("Team not found with id: " + teamId));
 
-        // Retrieve user details from User API via RabbitMQ
-//        UserDto user = rabbitTemplate.convertSendAndReceiveAsType(
-//                RabbitMQConfig.EXCHANGE_NAME,
-//                RabbitMQConfig.ROUTING_KEY,
-//                userId,
-//                USER_DTO_TYPE
-//        );
-//
         UserDto user = webClient.get()
                 .uri("/find?id=" + userId)
                 .retrieve()
@@ -114,20 +114,29 @@ public class TeamServiceImpl implements TeamService {
         logger.info("Successfully added user {} to team {}", userId, teamId);
     }
 
+
     @Override
     @Transactional
     public TeamDto assignManager(Long teamId, Long managerId) {
         logger.info("Assigning manager with id {} to team {}", managerId, teamId);
+
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new NotFoundException("Team not found with id: " + teamId));
 
-        // Fetch manager details via RabbitMQ from User API
-        UserDto user = rabbitTemplate.convertSendAndReceiveAsType(
-                RabbitMQConfig.EXCHANGE_NAME,
-                RabbitMQConfig.ROUTING_KEY,
-                managerId,
-                new ParameterizedTypeReference<UserDto>() {}
-        );
+        // Fetch manager details asynchronously
+        Mono<UserDto> userMono = webClient.get()
+                .uri("/find?id=" + managerId)
+                .retrieve()
+                .onStatus(HttpStatus.NOT_FOUND::equals, response -> {
+                    logger.error("Manager not found with id: {}", managerId);
+                    return response.createException().flatMap(error ->
+                            Mono.error(new NotFoundException("Manager not found with id: " + managerId))
+                    );
+                })
+                .bodyToMono(UserDto.class);
+
+        UserDto user = userMono.block(); // Convert reactive response to synchronous
+
         if (user == null) {
             logger.error("Manager user not found with id: {}", managerId);
             throw new NotFoundException("User not found with id: " + managerId);
@@ -138,6 +147,7 @@ public class TeamServiceImpl implements TeamService {
         logger.info("Manager assigned successfully for team {}", teamId);
         return teamMapper.toDto(team);
     }
+
 
     @Override
     @Transactional
