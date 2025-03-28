@@ -11,7 +11,7 @@ The **Team Management Service** is a Spring Boot application that enables admini
 - **Fetch User Data** from the User API via **RabbitMQ**
 
 ## 🛠️ Technologies Used
-- **Java 17**
+- **Java 17 +**
 - **Spring Boot 3**
 - **Spring Data JPA** (MySQL Database)
 - **RabbitMQ** (Messaging between services)
