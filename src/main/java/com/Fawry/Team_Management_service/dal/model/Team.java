@@ -19,6 +19,7 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String teamName;
     private Long managerId;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
