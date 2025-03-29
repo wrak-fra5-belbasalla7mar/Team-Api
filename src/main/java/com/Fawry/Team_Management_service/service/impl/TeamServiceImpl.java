@@ -12,7 +12,6 @@ import com.Fawry.Team_Management_service.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final TeamMapper teamMapper;
-    private final WebClient webClient = WebClient.create("http://localhost:8080/manager"); // Directly create WebClient
+    private final WebClient webClient = WebClient.create("http://localhost:8080/manager");
 
     @Override
     public List<TeamDto> getAllTeams() {
@@ -64,11 +63,17 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public TeamDto getTeamByManagerId(Long managerId) {
-        logger.info("Fetching team managed by user id: {}", managerId);
-        Team team = teamRepository.findByManagerId(managerId)
-                .orElseThrow(() -> new NotFoundException("No team found for this manager id: " + managerId));
-        return teamMapper.toDto(team);
+    public List<TeamDto> getTeamByManagerId(Long managerId) {
+        logger.info("Fetching teams managed by user id: {}", managerId);
+        List<Team> teams = teamRepository.findByManagerId(managerId);
+
+        if (teams.isEmpty()) {
+            throw new NotFoundException("No teams found for manager id: " + managerId);
+        }
+
+        return teams.stream()
+                .map(teamMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 

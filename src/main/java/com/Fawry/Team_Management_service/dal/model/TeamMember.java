@@ -18,6 +18,6 @@ public class TeamMember {
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 }

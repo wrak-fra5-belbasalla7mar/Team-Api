@@ -33,8 +33,9 @@ public class TeamController {
     }
 
     @GetMapping("/by-manager/{managerId}")
-    public ResponseEntity<TeamDto> getTeamByManager(@PathVariable Long managerId) {
-        return ResponseEntity.ok(teamService.getTeamByManagerId(managerId));
+    public ResponseEntity<List<TeamDto>> getTeamsByManager(@PathVariable Long managerId) {
+        List<TeamDto> teams = teamService.getTeamByManagerId(managerId);
+        return ResponseEntity.ok(teams);
     }
 
 

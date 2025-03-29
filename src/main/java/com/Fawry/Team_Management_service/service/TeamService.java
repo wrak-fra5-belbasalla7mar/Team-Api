@@ -18,6 +18,6 @@ public interface TeamService {
     public TeamDto assignManager(Long teamId, Long managerId);
 
     public void removeMember(Long teamId, Long userId);
-    public TeamDto getTeamByManagerId(Long managerId) ;
+    public List<TeamDto> getTeamByManagerId(Long managerId) ;
 
 }
