@@ -15,9 +15,8 @@ import lombok.Setter;
 public class TeamMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // Surrogate primary key
 
-    private Long userId;  // The actual user id
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
