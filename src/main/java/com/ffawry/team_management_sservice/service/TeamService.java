@@ -1,10 +1,8 @@
-package com.Fawry.Team_Management_service.service;
+package com.ffawry.team_management_sservice.service;
 
-import com.Fawry.Team_Management_service.dal.model.Team;
-import com.Fawry.Team_Management_service.dto.TeamDto;
+import com.ffawry.team_management_sservice.dto.TeamDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TeamService {
     public TeamDto getTeamById(Long teamId);

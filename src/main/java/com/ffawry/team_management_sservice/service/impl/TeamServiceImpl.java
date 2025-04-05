@@ -1,14 +1,14 @@
-package com.Fawry.Team_Management_service.service.impl;
+package com.ffawry.team_management_sservice.service.impl;
 
-import com.Fawry.Team_Management_service.dal.model.Team;
-import com.Fawry.Team_Management_service.dal.model.TeamMember;
-import com.Fawry.Team_Management_service.dal.repo.TeamMemberRepository;
-import com.Fawry.Team_Management_service.dal.repo.TeamRepository;
-import com.Fawry.Team_Management_service.dto.TeamDto;
-import com.Fawry.Team_Management_service.dto.UserDto;
-import com.Fawry.Team_Management_service.exception.NotFoundException;
-import com.Fawry.Team_Management_service.mapper.TeamMapper;
-import com.Fawry.Team_Management_service.service.TeamService;
+import com.ffawry.team_management_sservice.dal.model.Team;
+import com.ffawry.team_management_sservice.dal.model.TeamMember;
+import com.ffawry.team_management_sservice.dal.repo.TeamMemberRepository;
+import com.ffawry.team_management_sservice.dal.repo.TeamRepository;
+import com.ffawry.team_management_sservice.dto.TeamDto;
+import com.ffawry.team_management_sservice.dto.UserDto;
+import com.ffawry.team_management_sservice.exception.NotFoundException;
+import com.ffawry.team_management_sservice.mapper.TeamMapper;
+import com.ffawry.team_management_sservice.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

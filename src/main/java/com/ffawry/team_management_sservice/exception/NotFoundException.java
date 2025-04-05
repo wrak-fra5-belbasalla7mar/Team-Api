@@ -1,4 +1,4 @@
-package com.Fawry.Team_Management_service.exception;
+package com.ffawry.team_management_sservice.exception;
 
 public class NotFoundException extends RuntimeException {
 

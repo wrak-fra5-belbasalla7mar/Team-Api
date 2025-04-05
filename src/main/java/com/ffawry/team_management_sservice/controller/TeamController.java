@@ -1,7 +1,7 @@
-package com.Fawry.Team_Management_service.controller;
+package com.ffawry.team_management_sservice.controller;
 
-import com.Fawry.Team_Management_service.dto.TeamDto;
-import com.Fawry.Team_Management_service.service.TeamService;
+import com.ffawry.team_management_sservice.dto.TeamDto;
+import com.ffawry.team_management_sservice.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +31,10 @@ public class TeamController {
     public TeamDto getTeam(@PathVariable Long id) {
         return teamService.getTeamById(id);
     }
+
+
+//    @GetMapping // GET /teams?managerId=13&teamName=abdoTeam
+//    public ResponseEntity<List<TeamDto>> getTeamsByManager(@RequestParam("managerId") Long managerId) {
 
     @GetMapping("/by-manager/{managerId}")
     public ResponseEntity<List<TeamDto>> getTeamsByManager(@PathVariable Long managerId) {
