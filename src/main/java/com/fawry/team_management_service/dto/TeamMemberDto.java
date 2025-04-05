@@ -1,6 +1,6 @@
-package com.ffawry.team_management_sservice.dto;
+package com.fawry.team_management_service.dto;
 
-import com.ffawry.team_management_sservice.dal.model.Team;
+import com.fawry.team_management_service.dal.model.Team;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

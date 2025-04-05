@@ -1,7 +1,7 @@
-package com.ffawry.team_management_sservice.controller.advice;
+package com.fawry.team_management_service.controller.advice;
 
 
-import com.ffawry.team_management_sservice.exception.NotFoundException;
+import com.fawry.team_management_service.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

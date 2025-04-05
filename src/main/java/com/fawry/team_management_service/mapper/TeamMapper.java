@@ -1,7 +1,7 @@
-package com.ffawry.team_management_sservice.mapper;
+package com.fawry.team_management_service.mapper;
 
-import com.ffawry.team_management_sservice.dal.model.Team;
-import com.ffawry.team_management_sservice.dto.TeamDto;
+import com.fawry.team_management_service.dal.model.Team;
+import com.fawry.team_management_service.dto.TeamDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;

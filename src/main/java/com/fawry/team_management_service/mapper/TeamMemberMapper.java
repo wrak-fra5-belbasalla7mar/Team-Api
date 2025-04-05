@@ -1,7 +1,7 @@
-package com.ffawry.team_management_sservice.mapper;
+package com.fawry.team_management_service.mapper;
 
-import com.ffawry.team_management_sservice.dal.model.TeamMember;
-import com.ffawry.team_management_sservice.dto.TeamMemberDto;
+import com.fawry.team_management_service.dto.TeamMemberDto;
+import com.fawry.team_management_service.dal.model.TeamMember;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

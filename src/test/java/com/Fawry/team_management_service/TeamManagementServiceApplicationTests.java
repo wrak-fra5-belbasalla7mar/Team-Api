@@ -1,4 +1,4 @@
-package com.ffawry.team_management_sservice;
+package com.Fawry.team_management_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

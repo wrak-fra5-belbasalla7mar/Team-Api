@@ -1,6 +1,6 @@
-package com.ffawry.team_management_sservice.service;
+package com.fawry.team_management_service.service;
 
-import com.ffawry.team_management_sservice.dto.TeamDto;
+import com.fawry.team_management_service.dto.TeamDto;
 
 import java.util.List;
 
