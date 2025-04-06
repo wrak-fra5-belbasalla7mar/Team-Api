@@ -74,6 +74,15 @@ public class TeamServiceImpl implements TeamService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public Team getTeamByMemberId(Long id) {
+            getUser(id).block();
+            return teamMemberRepository.findByUserId(id).orElseThrow(
+                    ()->new NotFoundException("user with this id isn't assigned a team")
+            ).getTeam();
+    }
+
 
     @Override
     @Transactional
@@ -83,19 +92,7 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new NotFoundException("Team not found with id: " + teamId));
 
-        UserDto user = webClient.get()
-                .uri("/find?id=" + userId)
-                .retrieve()
-                .onStatus(HttpStatus.NOT_FOUND::equals, response -> {
-                    logger.error("User not found with id: {}", userId);
-                    return response.createException().flatMap(error ->
-                            Mono.error(new NotFoundException("User not found with id: " + userId))
-                    );
-                })
-                .bodyToMono(UserDto.class)
-                .block(); // Blocking call, use async handling in production
-
-
+        UserDto user = getUser(userId).block();
         if (user == null) {
             logger.error("User not found with id: {}", userId);
             throw new NotFoundException("User not found with id: " + userId);
@@ -126,19 +123,7 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new NotFoundException("Team not found with id: " + teamId));
 
-        // Fetch manager details asynchronously
-        Mono<UserDto> userMono = webClient.get()
-                .uri("/find?id=" + managerId)
-                .retrieve()
-                .onStatus(HttpStatus.NOT_FOUND::equals, response -> {
-                    logger.error("Manager not found with id: {}", managerId);
-                    return response.createException().flatMap(error ->
-                            Mono.error(new NotFoundException("Manager not found with id: " + managerId))
-                    );
-                })
-                .bodyToMono(UserDto.class);
-
-        UserDto user = userMono.block(); // Convert reactive response to synchronous
+        UserDto user = getUser(managerId).block(); // Convert reactive response to synchronous
 
         if (user == null) {
             logger.error("Manager user not found with id: {}", managerId);
@@ -168,5 +153,17 @@ public class TeamServiceImpl implements TeamService {
         teamMemberRepository.delete(member);
         teamRepository.save(team);
         logger.info("Successfully removed member {} from team {}", userId, teamId);
+    }
+    private Mono<UserDto> getUser(Long userId){
+        return  webClient.get()
+                .uri("/find?id=" + userId)
+                .retrieve()
+                .onStatus(HttpStatus.NOT_FOUND::equals, response -> {
+                    logger.error("Manager not found with id: {}", userId);
+                    return response.createException().flatMap(error ->
+                            Mono.error(new NotFoundException("Manager not found with id: " + userId))
+                    );
+                })
+                .bodyToMono(UserDto.class);
     }
 }

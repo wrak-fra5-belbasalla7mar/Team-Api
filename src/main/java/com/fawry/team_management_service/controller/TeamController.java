@@ -1,5 +1,6 @@
 package com.Fawry.Team_Management_service.controller;
 
+import com.Fawry.Team_Management_service.dal.model.Team;
 import com.Fawry.Team_Management_service.dto.TeamDto;
 import com.Fawry.Team_Management_service.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,10 @@ public class TeamController {
     public TeamDto getTeam(@PathVariable Long id) {
         return teamService.getTeamById(id);
     }
-
+    @GetMapping("team-members")
+    public ResponseEntity<Team> getTeamByMemberId(@RequestParam Long memberId){
+        return ResponseEntity.ok( teamService.getTeamByMemberId(memberId));
+    }
 
 //    @GetMapping // GET /teams?managerId=13&teamName=abdoTeam
 //    public ResponseEntity<List<TeamDto>> getTeamsByManager(@RequestParam("managerId") Long managerId) {

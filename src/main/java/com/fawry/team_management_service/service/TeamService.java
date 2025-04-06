@@ -1,5 +1,6 @@
 package com.Fawry.Team_Management_service.service;
 
+import com.Fawry.Team_Management_service.dal.model.Team;
 import com.Fawry.Team_Management_service.dto.TeamDto;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface TeamService {
 
     public void removeMember(Long teamId, Long userId);
     public List<TeamDto> getTeamByManagerId(Long managerId) ;
-
+    public Team getTeamByMemberId(Long id);
 }

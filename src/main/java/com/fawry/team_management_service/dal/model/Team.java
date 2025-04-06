@@ -1,5 +1,6 @@
 package com.Fawry.Team_Management_service.dal.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,5 +24,6 @@ public class Team {
     private Long managerId;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<TeamMember> members = new ArrayList<>();
 }
