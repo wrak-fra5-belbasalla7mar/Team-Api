@@ -1,4 +1,4 @@
-package com.fawry.team_management_service;
+package com.Fawry.Team_Management_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,7 +1,7 @@
-package com.fawry.team_management_service.controller;
+package com.Fawry.Team_Management_service.controller;
 
-import com.fawry.team_management_service.dto.TeamDto;
-import com.fawry.team_management_service.service.TeamService;
+import com.Fawry.Team_Management_service.dto.TeamDto;
+import com.Fawry.Team_Management_service.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

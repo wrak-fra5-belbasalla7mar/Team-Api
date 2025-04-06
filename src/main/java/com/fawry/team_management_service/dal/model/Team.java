@@ -1,4 +1,4 @@
-package com.fawry.team_management_service.dal.model;
+package com.Fawry.Team_Management_service.dal.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

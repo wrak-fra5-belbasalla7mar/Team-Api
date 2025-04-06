@@ -1,11 +1,10 @@
-package com.fawry.team_management_service.dal.model;
+package com.Fawry.Team_Management_service.dal.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @Entity
 @Table(name = "team_member")
 @Getter

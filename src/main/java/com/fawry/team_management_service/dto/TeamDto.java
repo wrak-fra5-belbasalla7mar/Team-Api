@@ -1,4 +1,4 @@
-package com.fawry.team_management_service.dto;
+package com.Fawry.Team_Management_service.dto;
 
 import lombok.Data;
 

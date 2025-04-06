@@ -1,6 +1,6 @@
-package com.fawry.team_management_service.dal.repo;
+package com.Fawry.Team_Management_service.dal.repo;
 
-import com.fawry.team_management_service.dal.model.TeamMember;
+import com.Fawry.Team_Management_service.dal.model.TeamMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
